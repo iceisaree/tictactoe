@@ -20,7 +20,6 @@ function App() {
   console.log("human", human);
   console.log("ai", ai);
   console.log("board", board);
-  console.log("board[0]", board[0]);
 
   const handleClickTable = async (index, player) => {
     if (board[index] !== "X" && board[index] !== "O") {
