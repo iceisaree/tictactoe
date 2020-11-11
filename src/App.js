@@ -15,16 +15,13 @@ function App() {
   const [channel6, setChannel6] = useState("");
   const [channel7, setChannel7] = useState("");
   const [channel8, setChannel8] = useState("");
-  const [iter, setIter] = useState(0);
   const [round, setRound] = useState(0);
-  console.log("human", human);
-  console.log("ai", ai);
-  console.log("board", board);
+  // console.log("board", board);
 
-  const handleClickTable = async (index, player) => {
+  const handleClickTable = (index, player) => {
     if (board[index] !== "X" && board[index] !== "O") {
       setRound(round + 2);
-      console.log("round", round);
+      // console.log("round", round);
       let newboard = board;
       newboard[index] = human;
       setBoard(newboard);
@@ -45,6 +42,7 @@ function App() {
         // setRound(round + 1);
         // console.log('roundAi', round)
         let aiIndex = minimax(board, ai).index;
+        console.log('minimax(board, ai)', minimax(board, ai))
         let newboard = board;
         newboard[aiIndex] = ai;
         setBoard(newboard);
@@ -75,13 +73,6 @@ function App() {
           }, 500);
           return;
         }
-        // else if (round === 0) {
-        //   setTimeout(function () {
-        //     alert("tie");
-        //     reset();
-        //   }, 500);
-        //   return;
-        // }
         else if (round > 7) {
           setTimeout(function () {
             alert("tie");
@@ -111,8 +102,7 @@ function App() {
   }
 
   function minimax(reboard, player) {
-    setIter(iter + 1);
-    let array = avail(reboard);
+    let allAvailIndex = avail(reboard);
     if (winning(reboard, human)) {
       return {
         score: -10,
@@ -121,18 +111,18 @@ function App() {
       return {
         score: 10,
       };
-    } else if (array.length === 0) {
+    } else if (allAvailIndex.length === 0) {
       return {
         score: 0,
       };
     }
 
     let moves = [];
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < allAvailIndex.length; i++) {
       let move = {};
 
-      move.index = reboard[array[i]];
-      reboard[array[i]] = player;
+      move.index = reboard[allAvailIndex[i]];
+      reboard[allAvailIndex[i]] = player;
 
       if (player === ai) {
         let g1 = minimax(reboard, human);
@@ -141,7 +131,7 @@ function App() {
         let g2 = minimax(reboard, ai);
         move.score = g2.score;
       }
-      reboard[array[i]] = move.index;
+      reboard[allAvailIndex[i]] = move.index;
       moves.push(move);
     }
 
